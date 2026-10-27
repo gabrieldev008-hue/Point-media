@@ -1,0 +1,22 @@
+{
+  "name": "@pointmedia/api", "version": "0.1.0", "private": true,
+  "scripts": {
+    "dev": "node --env-file=../../.env --watch --require ts-node/register src/main.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "start": "node --env-file=../../.env dist/main.js",
+    "db:generate": "prisma generate",
+    "db:migrate": "node --env-file=../../.env ../../node_modules/prisma/build/index.js migrate deploy",
+    "db:seed": "node --env-file=../../.env --require ts-node/register prisma/seed.ts",
+    "test": "jest --runInBand --config jest.config.cjs",
+    "test:integration": "node --env-file=../../.env ../../node_modules/jest/bin/jest.js --runInBand --config jest.e2e.config.cjs"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.1.6", "@nestjs/core": "^11.1.6", "@nestjs/platform-express": "^11.1.6",
+    "@nestjs/jwt": "^11.0.0", "@nestjs/swagger": "^11.2.0", "@nestjs/throttler": "^6.4.0",
+    "@prisma/client": "6.19.0", "@pointmedia/shared": "0.1.0", "argon2": "^0.44.0",
+    "class-transformer": "^0.5.1", "class-validator": "^0.14.2", "cookie-parser": "^1.4.7",
+    "helmet": "^8.1.0", "reflect-metadata": "^0.2.2", "rxjs": "^7.8.2", "zod": "^4.1.0"
+  },
+  "devDependencies": {"@nestjs/testing":"^11.1.6","@types/cookie-parser":"^1.4.9","@types/express":"^5.0.3","@types/jest":"^30.0.0","@types/node":"^24.3.0","@types/supertest":"^6.0.3","jest":"^30.0.5","prisma":"6.19.0","supertest":"^7.1.4","ts-jest":"^29.4.1","ts-node":"^10.9.2"}
+}

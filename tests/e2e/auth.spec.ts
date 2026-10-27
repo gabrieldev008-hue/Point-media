@@ -1,0 +1,22 @@
+import { test, expect } from '@playwright/test';
+test('candidate registers, logs in, cannot enter admin area, and logs out', async ({ page }) => {
+  const email = `browser-${Date.now()}@example.test`;
+  await page.goto('/cadastro');
+  await page.getByLabel('Nome completo').fill('Talento de Teste');
+  await page.getByLabel('E-mail', { exact: true }).fill(email);
+  await page.getByLabel('Senha', { exact: true }).fill('Browser-Password-123!');
+  await page.getByRole('button', { name: 'Criar conta', exact: true }).click();
+  await expect(page.getByRole('status')).toContainText('Conta criada');
+  await page.getByLabel('E-mail', { exact: true }).fill(email);
+  await page.getByLabel('Senha', { exact: true }).fill('Browser-Password-123!');
+  await page.getByRole('button', { name: 'Entrar', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Minha conta' })).toBeVisible();
+  await page.reload();
+  await expect(page.getByText(email, { exact: true })).toBeVisible();
+  await page.goto('/admin/recrutadores');
+  await expect(page.getByRole('alert')).toContainText('não tem permissão');
+  await page.getByRole('button', { name: 'Sair', exact: true }).click();
+  await expect(page).toHaveURL(/entrar/);
+  const response = await page.request.get('/api/auth/me');
+  expect(response.status()).toBe(401);
+});

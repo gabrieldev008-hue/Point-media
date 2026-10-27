@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+enum Role {
+  CANDIDATE
+  RECRUITER
+  ADMIN
+}
+model User {
+  id           String            @id @default(uuid()) @db.Uuid
+  email        String            @unique @db.VarChar(254)
+  passwordHash String
+  role         Role              @default(CANDIDATE)
+  active       Boolean           @default(true)
+  createdAt    DateTime          @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime          @updatedAt @db.Timestamptz(3)
+  profile      CandidateProfile?
+  sessions     AuthSession[]
+  auditLogs    AuditLog[]
+}
+model CandidateProfile {
+  id                String    @id @default(uuid()) @db.Uuid
+  userId            String    @unique @db.Uuid
+  name              String    @db.VarChar(120)
+  talentConsentAt   DateTime? @db.Timestamptz(3)
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+model AuthSession {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @db.Uuid
+  expiresAt DateTime  @db.Timestamptz(3)
+  revokedAt DateTime? @db.Timestamptz(3)
+  createdAt DateTime  @default(now()) @db.Timestamptz(3)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, expiresAt])
+  @@index([expiresAt])
+}
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  actorId   String?  @db.Uuid
+  action    String   @db.VarChar(80)
+  targetId  String?  @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  actor     User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  @@index([actorId, createdAt])
+  @@index([createdAt])
+}

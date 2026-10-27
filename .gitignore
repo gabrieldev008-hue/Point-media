@@ -1,0 +1,15 @@
+node_modules/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+*.log
+playwright-report/
+test-results/
+uploads/
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+*.db.*.backup
