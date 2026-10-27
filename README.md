@@ -101,3 +101,7 @@ Produção requer HTTPS com proxy de mesma origem para `/api`, backup consistent
 O Prisma 6 resolve `file:./pointmedia.db` em relação a `apps/api/prisma/schema.prisma`; o arquivo fica em `apps/api/prisma/pointmedia.db`. `npm run db:migrate` cria o arquivo e aplica o SQL versionado. Nenhum dado de um eventual PostgreSQL é convertido automaticamente. A referência anterior está em `docs/archive/postgresql`; `docker-compose.yml` foi preservado como material legado e não participa da execução SQLite.
 
 SQLite mantém os dados após reiniciar o app. Não versione nem compartilhe o `.db`: contém dados privados. Planejar backup e concorrência antes de uso com múltiplas instâncias.
+
+## License
+
+See [LICENSE](LICENSE), preserved from the GitHub repository.
